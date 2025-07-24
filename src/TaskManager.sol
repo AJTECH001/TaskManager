@@ -14,11 +14,7 @@ contract TaskManager {
     mapping(address => uint256[]) public userTasks;
     uint256 public taskCounter;
 
-    event TaskCreated(
-        uint256 indexed taskId,
-        address indexed owner,
-        string description
-    );
+    event TaskCreated(uint256 indexed taskId, address indexed owner, string description);
     event TaskCompleted(uint256 indexed taskId, address indexed owner);
     event TaskDeleted(uint256 indexed taskId, address indexed owner);
 
@@ -50,9 +46,7 @@ contract TaskManager {
         emit TaskCreated(taskCounter, msg.sender, _description);
     }
 
-    function completeTask(
-        uint256 _taskId
-    ) external taskExists(_taskId) onlyTaskOwner(_taskId) {
+    function completeTask(uint256 _taskId) external taskExists(_taskId) onlyTaskOwner(_taskId) {
         require(!tasks[_taskId].completed, "Task already completed");
 
         tasks[_taskId].completed = true;
@@ -60,9 +54,7 @@ contract TaskManager {
         emit TaskCompleted(_taskId, msg.sender);
     }
 
-    function deleteTask(
-        uint256 _taskId
-    ) external taskExists(_taskId) onlyTaskOwner(_taskId) {
+    function deleteTask(uint256 _taskId) external taskExists(_taskId) onlyTaskOwner(_taskId) {
         // Remove from user's task array
         uint256[] storage userTaskArray = userTasks[msg.sender];
         for (uint256 i = 0; i < userTaskArray.length; i++) {
@@ -78,9 +70,7 @@ contract TaskManager {
         emit TaskDeleted(_taskId, msg.sender);
     }
 
-    function getUserTasks(
-        address _user
-    ) external view returns (uint256[] memory) {
+    function getUserTasks(address _user) external view returns (uint256[] memory) {
         return userTasks[_user];
     }
 
@@ -88,9 +78,7 @@ contract TaskManager {
         return tasks[_taskId];
     }
 
-    function getUserTaskDetails(
-        address _user
-    ) external view returns (Task[] memory) {
+    function getUserTaskDetails(address _user) external view returns (Task[] memory) {
         uint256[] memory taskIds = userTasks[_user];
         Task[] memory userTaskDetails = new Task[](taskIds.length);
 
